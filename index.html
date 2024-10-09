@@ -17,7 +17,7 @@
             display: block;
             margin-top: 10px;
         }
-        input, button {
+        input, button, select {
             margin-top: 5px;
             padding: 8px;
             width: 100%;
@@ -89,8 +89,6 @@
     </div>
 
     <script>
-        let flights = []; // Flight data array to hold created flights
-
         function checkAccess() {
             const accessCode = document.getElementById("access-code").value;
             const accessResultDiv = document.getElementById("access-result");
@@ -126,11 +124,17 @@
                 seatLimit
             };
 
-            // Add flight to the flights array
-            flights.push(flight);
+            // Get existing flights from local storage
+            let existingFlights = JSON.parse(localStorage.getItem('flights')) || [];
+
+            // Add the new flight to the existing flights array
+            existingFlights.push(flight);
+
+            // Save the updated flight array back to local storage
+            localStorage.setItem('flights', JSON.stringify(existingFlights));
 
             // Clear input fields and display success message
-            document.getElementById("creation-result").innerHTML = "<p>Flight created successfully!</p>";
+            document.getElementById("creation-result").innerHTML = "<p>Flight created successfully and saved!</p>";
             document.getElementById("creation-date").value = ""; // Reset date
             document.getElementById("creation-stops").value = ""; // Reset stops
             document.getElementById("creation-seat-limit").value = ""; // Reset seat limit
