@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Creator - Radion Airways</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+        h2, h3 {
+            color: #003366;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, button {
+            margin-top: 5px;
+            padding: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00509e;
+        }
+        #flight-creation {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #003366;
+            border-radius: 5px;
+            background-color: #e6f7ff;
+        }
+        #creation-result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Flight Creator - Radion Airways</h2>
+
+    <div id="code-input">
+        <label for="access-code">Enter Access Code:</label>
+        <input type="password" id="access-code" placeholder="Enter code here" />
+        <button onclick="checkAccess()">Submit</button>
+        <div id="access-result"></div>
+    </div>
+
+    <div id="flight-creation" style="display: none;">
+        <h3>Create a New Flight</h3>
+        <label for="creation-departure">Departure Airport:</label>
+        <select id="creation-departure" required>
+            <option value="JAC">Jackson (JAC)</option>
+            <option value="MAJ">Madrid-Barajas (MAJ)</option>
+            <option value="MAC">Malacca (MAC)</option>
+        </select>
+
+        <label for="creation-arrival">Arrival Airport:</label>
+        <select id="creation-arrival" required>
+            <option value="JAC">Jackson (JAC)</option>
+            <option value="MAJ">Madrid-Barajas (MAJ)</option>
+            <option value="MAC">Malacca (MAC)</option>
+        </select>
+
+        <label for="creation-date">Flight Date:</label>
+        <input type="date" id="creation-date" required />
+
+        <label for="creation-stops">Number of Stops (Max 1):</label>
+        <input type="number" id="creation-stops" min="0" max="1" required />
+
+        <label for="creation-seat-limit">Seat Limit:</label>
+        <input type="number" id="creation-seat-limit" min="1" required />
+
+        <button type="button" onclick="createFlight()">Create Flight</button>
+        <div id="creation-result" style="margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        let flights = []; // Flight data array to hold created flights
+
+        function checkAccess() {
+            const accessCode = document.getElementById("access-code").value;
+            const accessResultDiv = document.getElementById("access-result");
+
+            if (accessCode === "4552") {
+                accessResultDiv.innerHTML = "<p>Access Granted! You may create flights.</p>";
+                document.getElementById("flight-creation").style.display = "block";
+                document.getElementById("code-input").style.display = "none";
+            } else {
+                accessResultDiv.innerHTML = "<p style='color: red;'>Access Denied! Please try again.</p>";
+            }
+        }
+
+        function createFlight() {
+            const departure = document.getElementById("creation-departure").value;
+            const arrival = document.getElementById("creation-arrival").value;
+            const date = document.getElementById("creation-date").value;
+            const stops = parseInt(document.getElementById("creation-stops").value);
+            const seatLimit = parseInt(document.getElementById("creation-seat-limit").value);
+
+            // Validate number of stops
+            if (stops > 1) {
+                document.getElementById("creation-result").innerHTML = "<p style='color: red;'>Error: Only 1 stop is allowed.</p>";
+                return;
+            }
+
+            // Create a flight object
+            const flight = {
+                departure,
+                arrival,
+                date,
+                stops,
+                seatLimit
+            };
+
+            // Add flight to the flights array
+            flights.push(flight);
+
+            // Clear input fields and display success message
+            document.getElementById("creation-result").innerHTML = "<p>Flight created successfully!</p>";
+            document.getElementById("creation-date").value = ""; // Reset date
+            document.getElementById("creation-stops").value = ""; // Reset stops
+            document.getElementById("creation-seat-limit").value = ""; // Reset seat limit
+        }
+    </script>
+</body>
+</html>
